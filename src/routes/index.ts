@@ -4,7 +4,7 @@ const apiPrefix = '/api';
 const definedRoutes = [userRoutes];
 
 const routes = (app) => {
-  definedRoutes.forEach((route: any) => app.use(apiPrefix, route));
+  definedRoutes.forEach((route) => app.use(apiPrefix, route));
 
   app.get(apiPrefix, (_req, res) =>
     res.status(200).json({
