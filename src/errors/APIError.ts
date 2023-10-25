@@ -1,11 +1,14 @@
-import { BaseError } from "./BaseError";
-import { StatusCodes } from "../types/statusCodes";
+import { BaseError } from './BaseError';
+import { StatusCodes } from '../types/statusCodes';
 
 class APIError extends BaseError {
   errorCode = StatusCodes.BAD_REQUEST;
-  errorType = "VALIDATION_ERROR";
+  errorType = 'VALIDATION_ERROR';
 
-  constructor(message: string, private property: string) {
+  constructor(
+    message: string,
+    private property: string,
+  ) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }

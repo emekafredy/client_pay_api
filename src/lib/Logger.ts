@@ -1,4 +1,5 @@
-const winston = require("winston");
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import winston from 'winston';
 
 const customLevels = {
   levels: {
@@ -10,28 +11,26 @@ const customLevels = {
     fatal: 0,
   },
   colors: {
-    trace: "white",
-    debug: "green",
-    info: "green",
-    warn: "yellow",
-    error: "red",
-    fatal: "red",
+    trace: 'white',
+    debug: 'green',
+    info: 'green',
+    warn: 'yellow',
+    error: 'red',
+    fatal: 'red',
   },
 };
 
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== 'production';
 
 const formatter = winston.format.combine(
   winston.format.colorize(),
-  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.splat(),
   winston.format.printf((info) => {
     const { timestamp, level, message, ...meta } = info;
 
-    return `${timestamp} [${level}]: ${message} ${
-      Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ""
-    }`;
-  })
+    return `${timestamp} [${level}]: ${message} ${Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''}`;
+  }),
 );
 
 class Logger {
@@ -39,14 +38,14 @@ class Logger {
 
   constructor() {
     const prodTransport = new winston.transports.File({
-      filename: "logs/error.log",
-      level: "error",
+      filename: 'logs/error.log',
+      level: 'error',
     });
     const transport = new winston.transports.Console({
       format: formatter,
     });
     this.logger = winston.createLogger({
-      level: isDev ? "trace" : "error",
+      level: isDev ? 'trace' : 'error',
       levels: customLevels.levels,
       transports: [isDev ? transport : prodTransport],
     });
@@ -55,7 +54,7 @@ class Logger {
   }
 
   trace(msg: any, meta?: any) {
-    this.logger.log("trace", msg, meta);
+    this.logger.log('trace', msg, meta);
   }
 
   debug(msg: any, meta?: any) {
@@ -75,7 +74,7 @@ class Logger {
   }
 
   fatal(msg: any, meta?: any) {
-    this.logger.log("fatal", msg, meta);
+    this.logger.log('fatal', msg, meta);
   }
 }
 

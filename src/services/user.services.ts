@@ -1,9 +1,8 @@
-import APIError from "../errors/APIError";
-import { StatusCodes } from "../types/statusCodes";
-import { BaseError } from "../errors/BaseError";
-import { AppDataSource } from "../data-source";
-import { NextFunction, Request, Response } from "express";
-import { User } from "../entity/User";
+import APIError from '../errors/APIError';
+import { BaseError } from '../errors/BaseError';
+import { AppDataSource } from '../data-source';
+import { Request, Response } from 'express';
+import { User } from '../entity/User';
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -17,7 +16,7 @@ export const createUser = async (req: Request, res: Response) => {
 
   const existingUser = await findByEmail(email);
   if (existingUser) {
-    throw new APIError("Email already exists", "email");
+    throw new APIError('Email already exists', 'email');
   }
 
   try {
@@ -31,6 +30,6 @@ export const createUser = async (req: Request, res: Response) => {
     const result = await userRepository.save(user);
     return result;
   } catch (err) {
-    res.status((<BaseError>err)?.errorCode || 500).send("Error saving user");
+    res.status((<BaseError>err)?.errorCode || 500).send('Error saving user');
   }
 };

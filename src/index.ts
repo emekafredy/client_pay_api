@@ -1,7 +1,7 @@
-import { AppDataSource } from "./data-source";
-import { PORT } from "./config";
-import app from "./app";
-import { logger } from "./lib/Logger";
+import { AppDataSource } from './data-source';
+import { PORT } from './config';
+import app from './app';
+import { logger } from './lib/Logger';
 
 AppDataSource.initialize()
   .then(async () => {

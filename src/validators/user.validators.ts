@@ -1,11 +1,11 @@
-import Joi from "joi";
-import { NextFunction, Response } from "express";
-import { StatusCodes } from "../types/statusCodes";
+import Joi from 'joi';
+import { NextFunction, Response } from 'express';
+import { StatusCodes } from '../types/statusCodes';
 
 export const validateInput = (
   req: { body: { firstName: string; lastName: string; age: number } },
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const body = req.body;
   const schema = Joi.object({
