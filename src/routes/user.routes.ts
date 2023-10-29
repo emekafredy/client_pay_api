@@ -1,11 +1,21 @@
 import express from 'express';
-import { allUsers, saveUser } from '../controller/user.controller';
-import { validateInput } from '../validators/user.validators';
+import { UserController } from '../controllers/User.controller';
+import {
+  authenticateUser,
+  authorizeUser,
+} from '../middlewares/auth.middleware';
+import { getCachedUsers } from '../middlewares/users.middleware';
 
 const router = express.Router();
 
-router.get('/users', allUsers);
+router.get(
+  '/users',
+  authenticateUser,
+  authorizeUser(['admin']),
+  getCachedUsers,
+  UserController.users,
+);
 
-router.post('/users', validateInput, saveUser);
+router.post('/user/:id', authenticateUser, UserController.profile);
 
 export default router;

@@ -1,35 +1,31 @@
-import APIError from '../errors/APIError';
-import { BaseError } from '../errors/BaseError';
+import { BaseError } from '../lib/errors/BaseError';
 import { AppDataSource } from '../data-source';
-import { Request, Response } from 'express';
-import { User } from '../entity/User';
+import { Request, Response, NextFunction } from 'express';
+import { User } from '../entities/User.entity';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
+import NotFoundError from '../lib/errors/NotFoundError';
+import redisClient from '../lib/redis';
+import { redisConfig } from '../config';
 
 const userRepository = AppDataSource.getRepository(User);
 
-export const findByEmail = async (email: string) => {
-  const user = await userRepository.findOne({ where: { email } });
+export const getUserProfile = async (req: Request, res: Response) => {
+  if (!req['userId']) throw new UnauthorizedError();
+
+  const user = await userRepository.findOne({
+    where: { id: req[' currentUser'].id },
+  });
+
+  if (!user) throw new NotFoundError('User');
   return user;
 };
 
-export const createUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, image_url } = req.body;
+export const getUsers = async (_req: Request, res: Response) => {
+  const users = await userRepository.find();
+  await redisClient.set('users', JSON.stringify(users), {
+    EX: redisConfig.redisCacheExpiresIn,
+    NX: true,
+  });
 
-  const existingUser = await findByEmail(email);
-  if (existingUser) {
-    throw new APIError('Email already exists', 'email');
-  }
-
-  try {
-    const user = Object.assign(new User(), {
-      firstName,
-      lastName,
-      email,
-      image_url,
-    });
-
-    const result = await userRepository.save(user);
-    return result;
-  } catch (err) {
-    res.status((<BaseError>err)?.errorCode || 500).send('Error saving user');
-  }
+  return users;
 };

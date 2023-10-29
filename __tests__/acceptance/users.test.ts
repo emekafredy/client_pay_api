@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { AppDataSource } from '../../src/data-source';
 import app from '../../src/app';
-import { PORT } from '../../src/config';
+import { port } from '../../src/config';
 
 let connection, server;
 
@@ -15,7 +15,7 @@ const testUser = {
 beforeEach(async () => {
   connection = await AppDataSource.initialize();
   await connection.synchronize(true);
-  server = app.listen(PORT);
+  server = app.listen(port);
 });
 
 afterEach(() => {

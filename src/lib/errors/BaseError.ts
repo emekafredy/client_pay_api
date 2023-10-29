@@ -1,15 +1,16 @@
 export abstract class BaseError extends Error {
-  abstract errorType: string;
   abstract errorCode: number;
 
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
+
+    Error.captureStackTrace(this);
   }
 
   abstract serializeErrors(): {
     message: string;
     property?: string;
-    status?: string;
+    status?: number;
   }[];
 }
