@@ -12,6 +12,8 @@ export const validateInput = (
     firstName: Joi.string().alphanum().min(3).max(30).required(),
     lastName: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().min(3).required().email(),
+    password: Joi.string().min(6).max(30).required(),
+    user_type: Joi.string().required().valid('employer', 'employee', 'admin'),
     image_url: Joi.string().min(3).required(),
   }).options({ abortEarly: false });
 
