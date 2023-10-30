@@ -6,8 +6,9 @@ import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import redisClient from '../lib/redis';
 import { redisConfig } from '../config';
+import { handleGetRepository } from '../utils';
 
-const userRepository = AppDataSource.getRepository(User);
+const userRepository = handleGetRepository(User);
 
 export const getUserProfile = async (req: Request, res: Response) => {
   if (!req['userId']) throw new UnauthorizedError();

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { verifyJWTToken } from '../utils';
+import { verifyJWTToken, handleGetRepository } from '../utils';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
-import { AppDataSource } from '../data-source';
 import { User } from '../entities/User.entity';
 import { StatusCodes } from '../types/statusCodes';
 
@@ -26,8 +25,8 @@ export const authenticateUser = (
 
 export const authorizeUser = (user_types: string[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
-    const userRepo = AppDataSource.getRepository(User);
-    const user = await userRepo.findOne({
+    const userRepository = handleGetRepository(User);
+    const user = await userRepository.findOne({
       where: { id: req['userId'].id },
     });
 

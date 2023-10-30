@@ -5,9 +5,9 @@ import { Request, Response } from 'express';
 import { User } from '../entities/User.entity';
 import { StatusCodes } from '../types/statusCodes';
 import { authCredentials } from '../config';
-import { generateJWTToken } from '../utils';
+import { generateJWTToken, handleGetRepository } from '../utils';
 
-const userRepository = AppDataSource.getRepository(User);
+const userRepository = handleGetRepository(User);
 
 export const findByEmail = async (email: string) => {
   const user = await userRepository.findOne({ where: { email } });

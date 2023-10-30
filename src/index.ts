@@ -10,7 +10,7 @@ AppDataSource.initialize()
     app.listen(port);
     logger.info(`Express server has started on port ${port}`);
   })
-  .catch((error) => console.log(error));
+  .catch((error) => logger.error(`Initialization error: ${error}`));
 
 process.on('uncaughtException', async (error: Error) => {
   await handleError(error);

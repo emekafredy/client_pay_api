@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { DataSource } from 'typeorm';
-import { postgresConfig } from './config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { postgresConfig, testPostgresConfig } from './config';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,3 +11,12 @@ export const AppDataSource = new DataSource({
   migrations: ['migration/**/*{.ts,.js}'],
   subscribers: [],
 });
+
+export const testDBConfig: DataSourceOptions = {
+  type: 'postgres',
+  ...testPostgresConfig,
+  synchronize: true,
+  dropSchema: true,
+  entities: ['src/entities/*.entity.{js,ts}'],
+};
+export const TestAppDataSource = new DataSource(testDBConfig);

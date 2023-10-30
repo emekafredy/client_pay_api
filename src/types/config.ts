@@ -1,18 +1,18 @@
-export interface IPostgresConfig {
+export type PostgresConfigType = {
   host: string;
   port: number;
   username: string;
   password: string;
   database: string;
-}
+};
 
-export interface IRedisConfig {
+export type RedisConfigType = {
   redisUrl: string;
   redisCacheExpiresIn: number;
-}
+};
 
-export interface IAuthCredentials {
+export type AuthCredentialsType = {
   privateKey: string;
   issuer: string;
   tokenExpiresIn: number;
-}
+};

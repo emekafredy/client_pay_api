@@ -16,6 +16,4 @@ router.get(
   UserController.users,
 );
 
-router.post('/user/:id', authenticateUser, UserController.profile);
-
 export default router;

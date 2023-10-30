@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import winston from 'winston';
+import { nodeEnv } from '../config';
 
 const customLevels = {
   levels: {
@@ -20,7 +21,7 @@ const customLevels = {
   },
 };
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = nodeEnv !== 'production';
 
 const formatter = winston.format.combine(
   winston.format.colorize(),
@@ -29,7 +30,9 @@ const formatter = winston.format.combine(
   winston.format.printf((info) => {
     const { timestamp, level, message, ...meta } = info;
 
-    return `${timestamp} [${level}]: ${message} ${Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''}`;
+    return `${timestamp} [${level}]: ${message} ${
+      Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
+    }`;
   }),
 );
 
