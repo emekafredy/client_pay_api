@@ -1,11 +1,4 @@
-import request from 'supertest';
-import { DataSource } from 'typeorm';
-import app from '../../src/app';
-import { port } from '../../src/config';
-import { closeInstance } from '../../src/lib/redis';
-import { initializeDataSource } from '../config/init-data-source';
-
-let dataSource: DataSource, server;
+import { TestFactory } from '../helpers/factory';
 
 const validInput = {
   firstName: 'John',
@@ -17,21 +10,22 @@ const validInput = {
 };
 
 describe('Authentication routes', () => {
-  beforeAll(async () => {
-    dataSource = await initializeDataSource();
-    server = app.listen(port);
+  const factory: TestFactory = new TestFactory();
 
-    return dataSource;
+  beforeEach((done) => {
+    factory.init().then(done);
   });
 
-  afterAll(() => {
-    dataSource.destroy();
-    server.close();
-    closeInstance();
+  afterEach((done) => {
+    factory.close().then(done);
   });
 
-  test('successful registeration for new user with valid input', async () => {
-    const response = await request(app)
+  afterAll((done) => {
+    factory.closeRedisServer().then(done);
+  });
+
+  it('successfully registers new user with valid input', async () => {
+    const response = await factory.app
       .post('/api/auth/signup')
       .send(validInput);
 
@@ -42,8 +36,8 @@ describe('Authentication routes', () => {
     expect(lastName).toEqual(validInput.lastName);
   });
 
-  test('error in registeration for new user with invalid input', async () => {
-    const response = await request(app)
+  it('throws error for new user with missing firstName', async () => {
+    const response = await factory.app
       .post('/api/auth/signup')
       .send({ ...validInput, firstName: '' });
 
@@ -51,5 +45,49 @@ describe('Authentication routes', () => {
 
     expect(response.statusCode).toBe(400);
     expect(errors[0].message).toEqual('"firstName" is not allowed to be empty');
+  });
+
+  it('throws error for new user with missing lastName', async () => {
+    const response = await factory.app
+      .post('/api/auth/signup')
+      .send({ ...validInput, lastName: '' });
+
+    const { errors } = response.body;
+
+    expect(response.statusCode).toBe(400);
+    expect(errors[0].message).toEqual('"lastName" is not allowed to be empty');
+  });
+
+  it('throws error for new user with missing email', async () => {
+    const response = await factory.app
+      .post('/api/auth/signup')
+      .send({ ...validInput, email: '' });
+
+    const { errors } = response.body;
+
+    expect(response.statusCode).toBe(400);
+    expect(errors[0].message).toEqual('"email" is not allowed to be empty');
+  });
+
+  it('throws error for new user with invalid email input', async () => {
+    const response = await factory.app
+      .post('/api/auth/signup')
+      .send({ ...validInput, email: 'john.doe@' });
+
+    const { errors } = response.body;
+
+    expect(response.statusCode).toBe(400);
+    expect(errors[0].message).toEqual('"email" must be a valid email');
+  });
+
+  it('throws error for new user with missing password', async () => {
+    const response = await factory.app
+      .post('/api/auth/signup')
+      .send({ ...validInput, password: '' });
+
+    const { errors } = response.body;
+
+    expect(response.statusCode).toBe(400);
+    expect(errors[0].message).toEqual('"password" is not allowed to be empty');
   });
 });

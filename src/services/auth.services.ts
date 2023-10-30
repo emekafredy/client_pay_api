@@ -1,10 +1,7 @@
 import BadRequestError from '../lib/errors/BadRequestError';
-import { BaseError } from '../lib/errors/BaseError';
-import { AppDataSource } from '../data-source';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { User } from '../entities/User.entity';
 import { StatusCodes } from '../types/statusCodes';
-import { authCredentials } from '../config';
 import { generateJWTToken, handleGetRepository } from '../utils';
 
 const userRepository = handleGetRepository(User);
@@ -14,7 +11,7 @@ export const findByEmail = async (email: string) => {
   return user;
 };
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request) => {
   const {
     firstName,
     lastName,
@@ -50,7 +47,7 @@ export const createUser = async (req: Request, res: Response) => {
   return { user, token };
 };
 
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request) => {
   const { email, password } = req.body;
 
   const existingUser = await findByEmail(email);

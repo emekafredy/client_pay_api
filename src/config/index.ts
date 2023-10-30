@@ -1,10 +1,11 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 import {
   AuthCredentialsType,
   PostgresConfigType,
   RedisConfigType,
 } from '../types/config';
 
+dotenv.config();
 export const port = process.env.PORT || 3000;
 export const nodeEnv = process.env.NODE_ENV || 'development';
 

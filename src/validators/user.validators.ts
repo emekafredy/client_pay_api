@@ -14,7 +14,7 @@ export const validateInput = (
     email: Joi.string().min(3).required().email(),
     password: Joi.string().min(6).max(30).required(),
     user_type: Joi.string().required().valid('employer', 'employee', 'admin'),
-    image_url: Joi.string().min(3).required(),
+    image_url: Joi.string(),
   }).options({ abortEarly: false });
 
   const validation = schema.validate(body);

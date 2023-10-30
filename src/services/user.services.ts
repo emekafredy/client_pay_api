@@ -1,6 +1,4 @@
-import { BaseError } from '../lib/errors/BaseError';
-import { AppDataSource } from '../data-source';
-import { Request, Response, NextFunction } from 'express';
+import { Request } from 'express';
 import { User } from '../entities/User.entity';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import NotFoundError from '../lib/errors/NotFoundError';
@@ -10,7 +8,7 @@ import { handleGetRepository } from '../utils';
 
 const userRepository = handleGetRepository(User);
 
-export const getUserProfile = async (req: Request, res: Response) => {
+export const getUserProfile = async (req: Request) => {
   if (!req['userId']) throw new UnauthorizedError();
 
   const user = await userRepository.findOne({
@@ -21,7 +19,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
   return user;
 };
 
-export const getUsers = async (_req: Request, res: Response) => {
+export const getUsers = async () => {
   const users = await userRepository.find();
   await redisClient.set('users', JSON.stringify(users), {
     EX: redisConfig.redisCacheExpiresIn,

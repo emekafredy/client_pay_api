@@ -23,7 +23,9 @@ async function errorMiddleware(
   _next: NextFunction,
 ) {
   if (err instanceof BaseError) {
-    return res.send({ errors: err.serializeErrors() });
+    const statusCode =
+      err.serializeErrors()[0]?.status || StatusCodes.INTERNAL_SERVER;
+    return res.status(statusCode).send({ errors: err.serializeErrors() });
   }
 
   await handleError(err, req, res);

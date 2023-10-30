@@ -1,4 +1,4 @@
-import { Entity, Index, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import Model from './Model.entity';
 import { User } from './User.entity';
 import { PayFrequencyEnumType } from '../types/entities';

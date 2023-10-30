@@ -4,7 +4,7 @@ import { createUser, loginUser } from '../services/auth.services';
 export class AuthController {
   static async signUp(req: Request, res: Response, next: NextFunction) {
     try {
-      const { user, token } = await createUser(req, res);
+      const { user, token } = await createUser(req);
 
       return res
         .status(200)
@@ -16,7 +16,7 @@ export class AuthController {
 
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const { existingUser, token } = await loginUser(req, res);
+      const { existingUser, token } = await loginUser(req);
 
       return res
         .status(200)
