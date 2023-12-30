@@ -31,7 +31,7 @@ describe('Authentication routes', () => {
 
     const { firstName, lastName } = response.body.user;
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(201);
     expect(firstName).toEqual(validInput.firstName);
     expect(lastName).toEqual(validInput.lastName);
   });

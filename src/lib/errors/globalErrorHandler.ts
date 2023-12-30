@@ -13,7 +13,7 @@ export const handleError = async (
 
   res
     .status(StatusCodes.INTERNAL_SERVER)
-    .send({ errors: [{ message: 'An error occurred' }] });
+    .send({ success: false, message: 'An error occurred' });
 };
 
 async function errorMiddleware(
@@ -25,7 +25,7 @@ async function errorMiddleware(
   if (err instanceof BaseError) {
     const statusCode =
       err.serializeErrors()[0]?.status || StatusCodes.INTERNAL_SERVER;
-    return res.status(statusCode).send({ errors: err.serializeErrors() });
+    return res.status(statusCode).send(err.serializeErrors());
   }
 
   await handleError(err, req, res);

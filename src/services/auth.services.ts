@@ -56,7 +56,7 @@ export const loginUser = async (req: Request) => {
     !(await User.comparePasswords(password, existingUser.password))
   ) {
     throw new BadRequestError(
-      '',
+      'auth',
       StatusCodes.BAD_REQUEST,
       'Invalid email or password',
     );

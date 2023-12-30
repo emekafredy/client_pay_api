@@ -20,11 +20,18 @@ export const validateInput = (
   const validation = schema.validate(body);
 
   if (validation.error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      status: StatusCodes.BAD_REQUEST,
-      errors: validation.error.details,
+    const errors = validation.error.details.map((err) => {
+      return {
+        message: err.message || 'Invalid input',
+        property: err.path[0] || 'auth',
+      };
     });
-    return;
+
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      success: false,
+      status: StatusCodes.BAD_REQUEST,
+      errors,
+    });
   }
   next();
 };

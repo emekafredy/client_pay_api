@@ -10,15 +10,15 @@ export const authenticateUser = (
   next: NextFunction,
 ) => {
   const header = req.headers.authorization;
-  if (!header) throw new UnauthorizedError();
+  if (!header) throw new UnauthorizedError(StatusCodes.UNAUTHORIZED);
 
   const token = header.split(' ')[1];
-  if (!token) throw new UnauthorizedError();
+  if (!token) throw new UnauthorizedError(StatusCodes.UNAUTHORIZED);
 
   const decoded = verifyJWTToken(token);
-  if (!decoded) throw new UnauthorizedError();
+  if (!decoded) throw new UnauthorizedError(StatusCodes.UNAUTHORIZED);
 
-  req['userId'] = decoded;
+  req['user'] = decoded;
 
   next();
 };
@@ -27,7 +27,7 @@ export const authorizeUser = (user_types: string[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const userRepository = handleGetRepository(User);
     const user = await userRepository.findOne({
-      where: { id: req['userId'].id },
+      where: { id: req['user'].sub },
     });
 
     if (!user_types.includes(user.user_type))
