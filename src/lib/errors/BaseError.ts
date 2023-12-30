@@ -9,8 +9,11 @@ export abstract class BaseError extends Error {
   }
 
   abstract serializeErrors(): {
-    message: string;
-    property?: string;
+    success: boolean;
     status?: number;
-  }[];
+    errors: {
+      message: string;
+      property?: string;
+    }[];
+  };
 }

@@ -14,9 +14,16 @@ class UnauthorizedError extends BaseError {
   }
 
   serializeErrors() {
-    return [
-      { message: this.message, property: this.property, status: this.status },
-    ];
+    return {
+      success: false,
+      status: this.status,
+      errors: [
+        {
+          message: this.message,
+          property: this.property,
+        },
+      ],
+    };
   }
 }
 

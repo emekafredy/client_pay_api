@@ -9,10 +9,10 @@ import { handleGetRepository } from '../utils';
 const userRepository = handleGetRepository(User);
 
 export const getUserProfile = async (req: Request) => {
-  if (!req['userId']) throw new UnauthorizedError();
+  if (!req['user']) throw new UnauthorizedError();
 
   const user = await userRepository.findOne({
-    where: { id: req[' currentUser'].id },
+    where: { id: req['user'].sub },
   });
 
   if (!user) throw new NotFoundError('User');

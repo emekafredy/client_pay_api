@@ -7,7 +7,7 @@ export class UserController {
       const users = await getUsers();
       return res
         .status(200)
-        .json({ message: 'Users fetched', fromCache: false, data: users });
+        .json({ success: true, fromCache: false, data: users });
     } catch (err) {
       next(err);
     }
@@ -16,7 +16,7 @@ export class UserController {
   static async profile(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await getUserProfile(req);
-      return res.status(200).json({ message: 'User profile fetched', user });
+      return res.status(200).json({ success: true, user });
     } catch (err) {
       next(err);
     }

@@ -16,4 +16,6 @@ router.get(
   UserController.users,
 );
 
+router.get('/user', authenticateUser, UserController.profile);
+
 export default router;
